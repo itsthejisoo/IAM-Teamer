@@ -1,0 +1,74 @@
+\section{Introduction}
+\label{sec:intro}
+
+As large language models (LLMs) continue to advance at an exponential pace, their range of applications has expanded rapidly, accompanied by growing concerns about their safety and reliability.
+To prevent models from generating harmful content, researchers have invested heavily in safety alignment through reinforcement learning from human feedback (RLHF) and safety fine-tuning~\cite{rlhf, safetyft}.
+Despite these defenses, malicious users craft jailbreak attacks that bypass safety policies and steer models into producing content that violates them.
+
+\begin{figure}[t]
+      \centering
+      \includegraphics[width=\textwidth]{architecture.png}
+      \caption{Overview of the IAM-Teamer framework. A harmful goal sampled from
+            AdvBench is sent to the Attack Model, which generates an attack prompt;
+            the Target Model produces a response, and the Judge Model scores it
+            along five axes (off-topic, refusal, convincing, specific, toxicity) to
+            yield a score and a set of success factors. Each attempt (attack prompt,
+            target response, score, strategy, success factor, and refusal pattern)
+            is recorded in the MemoryDB, whose accumulated target-specific feedback
+            conditions the Attack Model's next prompt.}
+      \label{fig:architecture}
+\end{figure}
+
+Research on such attacks has advanced in step with these defenses.
+Early jailbreaks relied on hand-crafted single prompts (e.g., token- or character-level perturbations, persona play, fictional framing, or prefix injection).
+However, these static and predictable methods are straightforward to defend against.
+Stronger white-box optimizers instead search for adversarial inputs using gradient signals~\cite{gcg}, but they require model internals that deployed systems do not expose.
+Recent work has introduced automated frameworks, such as Crescendo~\cite{crescendo} and GOAT~\cite{goat}, to orchestrate multi-turn jailbreak conversations.
+We review this progression in detail in Section~\ref{sec:related}.
+
+Despite this progress, even the most recent agentic frameworks share two limitations.
+First, the prompts they generate lack \emph{diversity}, collapsing into a narrow set of recurring patterns.
+Second, they apply \emph{a single strategy} uniformly to all models, regardless of their differing characteristics and safety alignments.
+
+To address these limitations, we propose IAM-Teamer (Inference-Adaptive Memory for Autonomous Red Teamer), a framework built from three models (Figure~\ref{fig:architecture}): an attack model that generates prompts, a target model that responds, and a judge model that scores each response.
+Every attempt (its prompt, the strategy used, and the resulting score) is recorded in a memory maintained separately for each target, and the attacker conditions its next prompt on this accumulated, target-specific feedback.
+By leveraging this per-target memory, IAM-Teamer sustains strategy exploration while adapting to specific model defenses, thereby achieving successful jailbreaks in substantially fewer turns.
+A comprehensive comparison with representative frameworks is summarized in Table~\ref{tab:framework_comparison}.
+
+\begin{table}[htbp]
+      \centering
+      \caption{Comparison with existing jailbreak frameworks.}
+      \label{tab:framework_comparison}
+      \footnotesize
+      \renewcommand{\arraystretch}{1.3}
+      \setlength{\aboverulesep}{0pt}
+      \setlength{\belowrulesep}{0pt}
+      \setlength{\tabcolsep}{6pt}
+      \begin{tabular}{lccccc}
+            \toprule
+            \thead[l]{Framework}                                             & \thead{Multi-turn} & \thead{Gradient-based\\optimization} & \thead{Long-life\\Memory} & \thead{Target-specific\\strategy\\selection} & \thead{Strategy-\\selection\\Refinement} \\
+            \midrule
+            GCG~\cite{gcg} / AutoPrompt~\cite{autoprompt} &                    & $\checkmark$                         &                           &                                              &                                          \\
+            PAIR~\cite{pair} / TAP~\cite{tap}                                & $\triangle$        &                                      &                           &                                              & $\triangle$                              \\
+            Rainbow Teaming~\cite{rainbow}                &                    &                                      & $\triangle$               &                                              & $\triangle$                              \\
+            AutoDAN-Turbo~\cite{autodanturbo}                                & $\triangle$        &                                      & $\checkmark$              &                                              &                                          \\
+            AutoRedTeamer~\cite{autoredteamer}            & $\triangle$        &                                      & $\checkmark$              &                                              &                                          \\
+            ASTRA~\cite{astra}                                               & $\checkmark$       &                                      & $\checkmark$              &                                              & $\triangle$                              \\
+            Crescendo~\cite{crescendo}                    & $\checkmark$       &                                      &                           &                                              &                                          \\
+            GOAT~\cite{goat}                                                 & $\checkmark$       &                                      &                           &                                              & $\checkmark$                             \\
+            \midrule
+            \textbf{IAM-Teamer (Ours)}                    & $\checkmark$       &                                      & $\checkmark$              & $\checkmark$                                 & $\checkmark$                             \\
+            \bottomrule
+      \end{tabular}
+
+      \begin{minipage}{\linewidth}
+            \footnotesize $\checkmark$: fully supported; $\triangle$: partially supported (e.g., iterative single-turn rather than a sustained multi-turn conversation); blank: not supported. \emph{Multi-turn}: drives a single evolving conversation. \emph{Long-life Memory}: persists learned strategies across goals. \emph{Target-specific strategy selection}: chooses strategies conditioned on the specific target's observed behavior. \emph{Strategy-selection Refinement}: updates the strategy choice from per-turn feedback.
+      \end{minipage}
+\end{table}
+
+Our contributions are summarized as follows:
+\begin{itemize}
+      \item \textbf{Target-Adaptive Framework:} We propose IAM-Teamer, a jailbreak framework that utilizes a persistent, per-target memory to dynamically adapt attack prompts to specific model defenses.
+      \item \textbf{Strategic Exploration \& Distillation:} We design a strategy pipeline that operationalizes this memory by integrating Thompson sampling for balanced strategy exploration and an automated judge for distilling successful attack mechanisms.
+      \item \textbf{Empirical Efficiency:} Across six open-weight and proprietary targets, we show that IAM-Teamer matches or exceeds strong multi-turn baselines (Crescendo and GOAT), reaching success in substantially fewer turns on highly aligned targets, at a small early-turn cost on the least-aligned target where an overt first turn already succeeds quickly.
+\end{itemize}

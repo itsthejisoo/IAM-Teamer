@@ -1,0 +1,395 @@
+@inproceedings{rlhf,
+  author    = {Christiano, Paul F and Leike, Jan and Brown, Tom and Martic, Miljan and Legg, Shane and Amodei, Dario},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {I. Guyon and U. Von Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+  pages     = {},
+  publisher = {Curran Associates, Inc.},
+  title     = {Deep Reinforcement Learning from Human Preferences},
+  volume    = {30},
+  year      = {2017}
+}
+
+
+@inproceedings{safetyft,
+  author    = {Sun, Zhiqing and Shen, Yikang and Zhou, Qinhong and Zhang, Hongxin and Chen, Zhenfang and Cox, David and Yang, Yiming and Gan, Chuang},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {A. Oh and T. Naumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
+  pages     = {2511--2565},
+  publisher = {Curran Associates, Inc.},
+  title     = {Principle-Driven Self-Alignment of Language Models from Scratch with Minimal Human Supervision},
+  volume    = {36},
+  year      = {2023}
+}
+
+@misc{gcg,
+  title         = {Universal and Transferable Adversarial Attacks on Aligned Language Models},
+  author        = {Andy Zou and Zifan Wang and Nicholas Carlini and Milad Nasr and J. Zico Kolter and Matt Fredrikson},
+  year          = {2023},
+  eprint        = {2307.15043},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL}
+}
+
+@inproceedings{crescendo,
+  author    = {Mark Russinovich and Ahmed Salem and Ronen Eldan},
+  title     = {Great, Now Write an Article About That: The Crescendo {Multi-Turn} {LLM} Jailbreak Attack},
+  booktitle = {34th USENIX Security Symposium (USENIX Security 25)},
+  year      = {2024},
+  isbn      = {978-1-939133-52-6},
+  address   = {Seattle, WA},
+  pages     = {2421--2440},
+  publisher = {USENIX Association},
+  month     = aug
+}
+
+@misc{goat,
+  title         = {Automated Red Teaming with GOAT: the Generative Offensive Agent Tester},
+  author        = {Maya Pavlova and Erik Brinkman and Krithika Iyer and Vitor Albiero and Joanna Bitton and Hailey Nguyen and Joe Li and Cristian Canton Ferrer and Ivan Evtimov and Aaron Grattafiori},
+  year          = {2024},
+  eprint        = {2410.01606},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.LG}
+}
+
+@inproceedings{instructgpt,
+  author    = {Ouyang, Long and Wu, Jeffrey and Jiang, Xu and Almeida, Diogo and Wainwright, Carroll and Mishkin, Pamela and Zhang, Chong and Agarwal, Sandhini and Slama, Katarina and Ray, Alex and Schulman, John and Hilton, Jacob and Kelton, Fraser and Miller, Luke and Simens, Maddie and Askell, Amanda and Welinder, Peter and Christiano, Paul F and Leike, Jan and Lowe, Ryan},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh},
+  pages     = {27730--27744},
+  publisher = {Curran Associates, Inc.},
+  title     = {Training language models to follow instructions with human feedback},
+  volume    = {35},
+  year      = {2022}
+}
+
+@misc{deliberative,
+  title         = {Deliberative Alignment: Reasoning Enables Safer Language Models},
+  author        = {Melody Y. Guan and Manas Joglekar and Eric Wallace and Saachi Jain and Boaz Barak and Alec Helyar and Rachel Dias and Andrea Vallone and Hongyu Ren and Jason Wei and Hyung Won Chung and Sam Toyer and Johannes Heidecke and Alex Beutel and Amelia Glaese},
+  year          = {2025},
+  eprint        = {2412.16339},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL}
+}
+
+@inproceedings{jailbroken,
+  author    = {Wei, Alexander and Haghtalab, Nika and Steinhardt, Jacob},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {A. Oh and T. Naumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
+  pages     = {80079--80110},
+  publisher = {Curran Associates, Inc.},
+  title     = {Jailbroken: How Does LLM Safety Training Fail?},
+  volume    = {36},
+  year      = {2023}
+}
+
+@inproceedings{autoprompt,
+  title     = {{A}uto{P}rompt: {E}liciting {K}nowledge from {L}anguage {M}odels with {A}utomatically {G}enerated {P}rompts},
+  author    = {Shin, Taylor  and
+               Razeghi, Yasaman  and
+               Logan IV, Robert L.  and
+               Wallace, Eric  and
+               Singh, Sameer},
+  editor    = {Webber, Bonnie  and
+               Cohn, Trevor  and
+               He, Yulan  and
+               Liu, Yang},
+  booktitle = {Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  month     = nov,
+  year      = {2020},
+  address   = {Online},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2020.emnlp-main.346},
+  pages     = {4222--4235},
+  abstract  = {The remarkable success of pretrained language models has motivated the study of what kinds of knowledge these models learn during pretraining. Reformulating tasks as fill-in-the-blanks problems (e.g., cloze tests) is a natural approach for gauging such knowledge, however, its usage is limited by the manual effort and guesswork required to write suitable prompts. To address this, we develop AutoPrompt, an automated method to create prompts for a diverse set of tasks, based on a gradient-guided search. Using AutoPrompt, we show that masked language models (MLMs) have an inherent capability to perform sentiment analysis and natural language inference without additional parameters or finetuning, sometimes achieving performance on par with recent state-of-the-art supervised models. We also show that our prompts elicit more accurate factual knowledge from MLMs than the manually created prompts on the LAMA benchmark, and that MLMs can be used as relation extractors more effectively than supervised relation extraction models. These results demonstrate that automatically generated prompts are a viable parameter-free alternative to existing probing methods, and as pretrained LMs become more sophisticated and capable, potentially a replacement for finetuning.}
+}
+
+@misc{personaprompts,
+  title         = {Enhancing Jailbreak Attacks on LLMs via Persona Prompts},
+  author        = {Zheng Zhang and Peilin Zhao and Deheng Ye and Hao Wang},
+  year          = {2025},
+  eprint        = {2507.22171},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CR}
+}
+
+@misc{personamod,
+  title         = {Scalable and Transferable Black-Box Jailbreaks for Language Models via Persona Modulation},
+  author        = {Rusheb Shah and Quentin Feuillade--Montixi and Soroush Pour and Arush Tagade and Stephen Casper and Javier Rando},
+  year          = {2023},
+  eprint        = {2311.03348},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL}
+}
+
+@inproceedings{pap,
+  title     = {How Johnny Can Persuade {LLM}s to Jailbreak Them: Rethinking Persuasion to Challenge {AI} Safety by Humanizing {LLM}s},
+  author    = {Zeng, Yi  and
+               Lin, Hongpeng  and
+               Zhang, Jingwen  and
+               Yang, Diyi  and
+               Jia, Ruoxi  and
+               Shi, Weiyan},
+  editor    = {Ku, Lun-Wei  and
+               Martins, Andre  and
+               Srikumar, Vivek},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month     = aug,
+  year      = {2024},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2024.acl-long.773},
+  pages     = {14322--14350},
+  abstract  = {Most traditional AI safety research views models as machines and centers on algorithm-focused attacks developed by security experts. As large language models (LLMs) become increasingly common and competent, non-expert users can also impose risks during daily interactions. Observing this, we shift the perspective, by treating LLMs as human-like communicators to examine the interplay between everyday language interaction and AI safety. Specifically, we study how to persuade LLMs to jailbreak them. First, we propose a persuasion taxonomy derived from decades of social science research. Then, we apply the taxonomy to automatically generate persuasive adversarial prompts (PAP) to jailbreak LLMs. Results show that persuasion significantly increases the jailbreak risk across all risk categories: PAP consistently achieves an attack success rate of over 92{\%} on Llama-2-7b-Chat, GPT-3.5, and GPT-4 in 10 trials, surpassing recent algorithm-focused attacks. On the defense side, we explore various mechanisms against PAP, find a significant gap in existing defenses, and advocate for more fundamental solutions for AI safety.}
+}
+
+@misc{deepinception,
+  title         = {DeepInception: Hypnotize Large Language Model to Be Jailbreaker},
+  author        = {Xuan Li and Zhanke Zhou and Jianing Zhu and Jiangchao Yao and Tongliang Liu and Bo Han},
+  year          = {2024},
+  eprint        = {2311.03191},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.LG}
+}
+
+@inproceedings{hill,
+  title     = {A Simple and Efficient Learning-Style Prompting for {LLM} Jailbreaking},
+  author    = {Luo, Xuan  and
+               Wang, Yue  and
+               He, Zefeng  and
+               Tu, Geng  and
+               Li, Jing  and
+               Xu, Ruifeng},
+  editor    = {Demberg, Vera  and
+               Inui, Kentaro  and
+               Marquez, Llu{\'i}s},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026},
+  month     = mar,
+  year      = {2026},
+  address   = {Rabat, Morocco},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2026.findings-eacl.124},
+  pages     = {2389--2406},
+  isbn      = {979-8-89176-386-9}
+}
+
+@misc{priming,
+  title         = {Bypassing the Safety Training of Open-Source LLMs with Priming Attacks},
+  author        = {Jason Vega and Isha Chaudhary and Changming Xu and Gagandeep Singh},
+  year          = {2024},
+  eprint        = {2312.12321},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CR}
+}
+
+@inproceedings{dsn,
+  title     = {Don{'}t Say No: Jailbreaking {LLM} by Suppressing Refusal},
+  author    = {Zhou, Yukai  and
+               Lou, Jian  and
+               Huang, Zhijie  and
+               Qin, Zhan  and
+               Yang, Sibei  and
+               Wang, Wenjie},
+  editor    = {Che, Wanxiang  and
+               Nabende, Joyce  and
+               Shutova, Ekaterina  and
+               Pilehvar, Mohammad Taher},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},
+  month     = jul,
+  year      = {2025},
+  address   = {Vienna, Austria},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2025.findings-acl.1294},
+  pages     = {25224--25249},
+  isbn      = {979-8-89176-256-5},
+  abstract  = {Ensuring the safety alignment of Large Language Models (LLMs) is critical for generating responses consistent with human values. However, LLMs remain vulnerable to jailbreaking attacks, where carefully crafted prompts manipulate them into producing toxic content. One category of such attacks reformulates the task as an optimization problem, aiming to elicit affirmative responses from the LLM. However, these methods heavily rely on predefined objectionable behaviors, limiting their effectiveness and adaptability to diverse harmful queries. In this study, we first identify why the vanilla target loss is suboptimal and then propose enhancements to the loss objective. We introduce $\textit{DSN}$ (Don{'}t Say No) attack, which combines a cosine decay schedule method with refusal suppression to achieve higher success rates. Extensive experiments demonstrate that $\textit{DSN}$ outperforms baseline attacks and achieves state-of-the-art attack success rates (ASR). $\textit{DSN}$ also shows strong universality and transferability to unseen datasets and black-box models.}
+}
+
+@inproceedings{scp,
+  title     = {Single character perturbations break llm alignment},
+  author    = {Lin, Leon and Brown, Hannah and Kawaguchi, Kenji and Shieh, Michael},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {39},
+  number    = {26},
+  pages     = {27473--27481},
+  year      = {2025}
+}
+
+@inproceedings{cipherchat,
+  author    = {Yuan, Youliang and Jiao, Wenxiang and Wang, Wenxuan and Huang, Jen-Tse and He, Pinjia and Shi, Shuming and Tu, Zhaopeng},
+  booktitle = {International Conference on Learning Representations},
+  editor    = {B. Kim and Y. Yue and S. Chaudhuri and K. Fragkiadaki and M. Khan and Y. Sun},
+  pages     = {53902--53922},
+  title     = {GPT-4 Is Too Smart To Be Safe: Stealthy Chat with LLMs via Cipher},
+  volume    = {2024},
+  year      = {2024}
+}
+
+
+@inproceedings{pair,
+  author    = {Chao, Patrick and Robey, Alexander and Dobriban, Edgar and Hassani, Hamed and Pappas, George J. and Wong, Eric},
+  booktitle = {2025 IEEE Conference on Secure and Trustworthy Machine Learning (SaTML)},
+  title     = {Jailbreaking Black Box Large Language Models in Twenty Queries},
+  year      = {2025},
+  volume    = {},
+  number    = {},
+  pages     = {23-42},
+  keywords  = {Machine learning algorithms;Large language models;Instruments;Semantics;Closed box;Machine learning;Iterative algorithms;Safety;Jailbreaking;adversarial attacks;LLMs},
+  doi       = {10.1109/SaTML64287.2025.00010}
+}
+
+@inproceedings{tap,
+  author    = {Mehrotra, Anay and Zampetakis, Manolis and Kassianik, Paul and Nelson, Blaine and Anderson, Hyrum and Singer, Yaron and Karbasi, Amin},
+  booktitle = {Advances in Neural Information Processing Systems},
+  doi       = {10.52202/079017-1952},
+  editor    = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},
+  pages     = {61065--61105},
+  publisher = {Curran Associates, Inc.},
+  title     = {Tree of Attacks: Jailbreaking Black-Box LLMs Automatically},
+  volume    = {37},
+  year      = {2024}
+}
+
+
+@misc{jbr1,
+  title         = {Jailbreak-R1: Exploring the Jailbreak Capabilities of LLMs via Reinforcement Learning},
+  author        = {Weiyang Guo and Zesheng Shi and Zhuo Li and Yequan Wang and Xuebo Liu and Wenya Wang and Fangming Liu and Min Zhang and Jing Li},
+  year          = {2025},
+  eprint        = {2506.00782},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.AI}
+}
+
+@inproceedings{astra,
+  title     = {{ASTRA}: An Automated Framework for Strategy Discovery, Retrieval, and Evolution for Jailbreaking {LLM}s},
+  author    = {Liu, Xu  and
+               Chen, Yan  and
+               Ling, Kan  and
+               Zhu, Yichi  and
+               Zhang, Hengrun  and
+               Fan, Guisheng  and
+               Yu, Huiqun},
+  editor    = {Liakata, Maria  and
+               Moreira, Viviane P.  and
+               Zhang, Jiajun  and
+               Jurgens, David},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  month     = jul,
+  year      = {2026},
+  address   = {San Diego, California, United States},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2026.acl-long.1843},
+  pages     = {39691--39710},
+  isbn      = {979-8-89176-390-6},
+  abstract  = {Despite extensive safety alignment, Large Language Models (LLMs) remain vulnerable to jailbreak attacks. However, existing methods generally lack the capability for continuous learning and self-evolution from interactions, limiting the diversity and adaptability of attack strategies. To address this, we propose ASTRA, an automated framework capable of autonomously discovering, retrieving, and evolving attack strategies. ASTRA operates on a closed-loop ``attack-evaluate-distill-reuse'' mechanism, which not only generates attack prompts but also automatically distills reusable strategies from every interaction. To systematically manage these strategies, we introduce a dynamic three-tier strategy library (Effective, Promising, and Ineffective) that categorizes strategies based on performance. This hierarchical memory mechanism enables the framework to enhance efficiency by leveraging successful patterns while optimizing the exploration space by avoiding known failures. Extensive experiments in a black-box setting demonstrate that ASTRA significantly outperforms existing baselines.}
+}
+
+@inproceedings{actorattack,
+  title     = {{LLM}s know their vulnerabilities: Uncover Safety Gaps through Natural Distribution Shifts},
+  author    = {Ren, Qibing  and
+               Li, Hao  and
+               Liu, Dongrui  and
+               Xie, Zhanxu  and
+               Lu, Xiaoya  and
+               Qiao, Yu  and
+               Sha, Lei  and
+               Yan, Junchi  and
+               Ma, Lizhuang  and
+               Shao, Jing},
+  editor    = {Che, Wanxiang  and
+               Nabende, Joyce  and
+               Shutova, Ekaterina  and
+               Pilehvar, Mohammad Taher},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month     = jul,
+  year      = {2025},
+  address   = {Vienna, Austria},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2025.acl-long.1207},
+  pages     = {24763--24785},
+  isbn      = {979-8-89176-251-0},
+  abstract  = {Safety concerns in large language models (LLMs) have gained significant attention due to their exposure to potentially harmful data during pre-training. In this paper, we identify a new safety vulnerability in LLMs: their susceptibility to \textit{natural distribution shifts} between attack prompts and original toxic prompts, where seemingly benign prompts, semantically related to harmful content, can bypass safety mechanisms. To explore this issue, we introduce a novel attack method, \textit{ActorBreaker}, which identifies actors related to toxic prompts within pre-training distribution to craft multi-turn prompts that gradually lead LLMs to reveal unsafe content. ActorBreaker is grounded in Latour{'}s actor-network theory, encompassing both human and non-human actors to capture a broader range of vulnerabilities. Our experimental results demonstrate that ActorBreaker outperforms existing attack methods in terms of diversity, effectiveness, and efficiency across aligned LLMs. To address this vulnerability, we propose expanding safety training to cover a broader semantic space of toxic content. We thus construct a multi-turn safety dataset using ActorBreaker. Fine-tuning models on our dataset shows significant improvements in robustness, though with some trade-offs in utility. Code is available at https://github.com/AI45Lab/ActorAttack.}
+}
+
+@misc{xteaming,
+  title         = {X-Teaming: Multi-Turn Jailbreaks and Defenses with Adaptive Multi-Agents},
+  author        = {Salman Rahman and Liwei Jiang and James Shiffer and Genglin Liu and Sheriff Issaka and Md Rizwan Parvez and Hamid Palangi and Kai-Wei Chang and Yejin Choi and Saadia Gabriel},
+  year          = {2025},
+  eprint        = {2504.13203},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CR}
+}
+
+@misc{mrjagent,
+  title         = {MRJ-Agent: An Effective Jailbreak Agent for Multi-Round Dialogue},
+  author        = {Fengxiang Wang and Ranjie Duan and Peng Xiao and Xiaojun Jia and Shiji Zhao and Cheng Wei and YueFeng Chen and Chongwen Wang and Jialing Tao and Hang Su and Jun Zhu and Hui Xue},
+  year          = {2025},
+  eprint        = {2411.03814},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.AI}
+}
+
+@inproceedings{autodanturbo,
+  author    = {Liu, Xiaogeng and Li, Peiran and Suh, G. Edward and Vorobeychik, Yevgeniy and Mao, Zhuoqing and Jha, Somesh and McDaniel, Patrick and Sun, Huan and Li, Bo and Xiao, Chaowei},
+  booktitle = {International Conference on Learning Representations},
+  editor    = {Y. Yue and A. Garg and N. Peng and F. Sha and R. Yu},
+  pages     = {10313--10360},
+  title     = {AutoDAN-Turbo: A Lifelong Agent for Strategy Self-Exploration to Jailbreak LLMs},
+  volume    = {2025},
+  year      = {2025}
+}
+
+
+@inproceedings{autoredteamer,
+  author    = {Zhou, Andy and Wu, Kevin and Pinto, Francesco and Chen, Zhaorun and Zeng, Yi and Yang, Yu and Yang, Shuang and Koyejo, Sanmi and Zou, James and Li, Bo},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {D. Belgrave and C. Zhang and H. Lin and R. Pascanu and P. Koniusz and M. Ghassemi and N. Chen},
+  pages     = {169852--169895},
+  publisher = {Curran Associates, Inc.},
+  title     = {AutoRedTeamer: Autonomous Red Teaming with Lifelong Attack Integration},
+  volume    = {38},
+  year      = {2025}
+}
+
+
+@inproceedings{rainbow,
+  author    = {Samvelyan, Mikayel and Raparthy, Sharath Chandra and Lupu, Andrei and Hambro, Eric and Markosyan, Aram H. and Bhatt, Manish and Mao, Yuning and Jiang, Minqi and Parker-Holder, Jack and Foerster, Jakob and Rockt\"{a}schel, Tim and Raileanu, Roberta},
+  booktitle = {Advances in Neural Information Processing Systems},
+  doi       = {10.52202/079017-2229},
+  editor    = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},
+  pages     = {69747--69786},
+  publisher = {Curran Associates, Inc.},
+  title     = {Rainbow Teaming: Open-Ended Generation of Diverse Adversarial Prompts},
+  volume    = {37},
+  year      = {2024}
+}
+
+
+@misc{elite,
+  title         = {ELITE: Enhanced Language-Image Toxicity Evaluation for Safety},
+  author        = {Wonjun Lee and Doehyeon Lee and Eugene Choi and Sangyoon Yu and Ashkan Yousefpour and Haon Park and Bumsub Ham and Suhyun Kim},
+  year          = {2025},
+  eprint        = {2502.04757},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CV}
+}
+
+@misc{thompson,
+  title         = {A Tutorial on Thompson Sampling},
+  author        = {Daniel Russo and Benjamin Van Roy and Abbas Kazerouni and Ian Osband and Zheng Wen},
+  year          = {2020},
+  eprint        = {1707.02038},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.LG}
+}
+
+@inproceedings{CoT,
+  author    = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and ichter, brian and Xia, Fei and Chi, Ed and Le, Quoc V and Zhou, Denny},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh},
+  pages     = {24824--24837},
+  publisher = {Curran Associates, Inc.},
+  title     = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+  volume    = {35},
+  year      = {2022}
+}
+

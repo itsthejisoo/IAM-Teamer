@@ -1,0 +1,151 @@
+\section{Methodology}
+\label{sec:method}
+
+We propose IAM-Teamer, an automated jailbreak framework inspired by the way human red-teamers probe a model through repeated, adaptive interaction.
+As illustrated in Figure~\ref{fig:architecture}, IAM-Teamer comprises four components: an Attack Model, a Target Model, a Judge Model, and a MemoryDB.
+Over a multi-turn conversation, the Attack Model automatically generates diverse attack prompts, the Target Model produces responses, and the Judge Model evaluates each response to determine whether the attack succeeds.
+Each attempt (prompt, the strategy used, and the resulting score) is recorded in the MemoryDB, and the Attack Model conditions its next prompts on this accumulated feedback.
+Through this loop, IAM-Teamer steers itself toward attack prompts that are increasingly effective against the specific target.
+
+\subsection{Target Model and Notation}
+\label{sec:threat}
+
+We assume a black-box setting in which the adversary interacts with a target model $T$ only through its conversational interface, observing nothing but the textual responses; $T$'s parameters, gradients, and output logits are inaccessible.
+Given a harmful goal $g$, the adversary conducts a multi-turn conversation of up to $K$ turns and aims to elicit a response that fulfills $g$ in violation of $T$'s safety policy.
+At each turn, the attack model $A$ generates a prompt under a strategy $s$, and the target model $T$ responds to the query. The judge model $J$ then assigns a score $r$ based on a predefined evaluation metric.
+All attempts are stored in a per-target memory $\mathcal{M}_T$.
+We denote by $\mathcal{S}_0$ the set of seed strategies and by $\mathcal{S}$ the set of all strategies.
+
+\subsection{Attack Model}
+\label{sec:attack}
+
+The attack model $A$ generates the prompt at each turn conditioned on the goal $g$, the refusal signals from the previous turn, the conversation history, and a strategy hint derived from memory.
+To avoid triggering an early refusal that biases the model toward subsequent refusals, the first turn uses a soft-opening, a benign-looking prompt that establishes context without revealing harmful intent.
+After the first turn, $A$ escalates toward $g$ gradually, so that no single turn appears overtly harmful.
+
+We observe that refusals tend to persist: after a refused turn, the target frequently refuses again on the next turn (Table~\ref{tab:refusal_transition}).
+To mitigate this, whenever the target model refuses, we remove the refused turn from the conversation context presented to the target, so that the refusal does not condition later responses; the removed turn is nonetheless counted toward the $K$-turn budget. This backtracking is bounded by a per-run cap of $B=5$ retries inside the same $K=10$ attempt budget. Once the cap is reached, a refused exchange is instead committed to the visible conversation, and the run advances to the next turn.
+
+IAM-Teamer defines five seed strategies $\mathcal{S}_0 = \{$persona modulation, state injection, scenario framing, parallel response, topic fragmentation$\}$ (Table~\ref{tab:seed_strategies}).
+Persona modulation assigns the target a persona or character so that it complies with otherwise-refused instructions.
+State injection forces the response into a compliant state through two techniques (prefix injection, which makes the reply begin with a compliant prefix, and refusal suppression, which forbids refusal language), thereby bypassing refusal at the output level.
+Scenario framing wraps the request in nested fictional, hypothetical, or evaluation scenarios to dilute its directness.
+Parallel response asks for two or more contrasting answers in a single turn so that one of them over-complies.
+Topic fragmentation buries the harmful request among innocuous subtasks so that its intent is not scrutinized as a whole.
+Crucially, $A$ is not restricted to $\mathcal{S}_0$: it may compose existing strategies or invent new ones, expressed as a free-form strategy family that is canonicalized and added to $\mathcal{S}$.
+At each turn, $A$ outputs the attack prompt together with a short reasoning summary and the strategy family it used.
+
+\begin{table}[htbp]
+      \centering
+      \caption{Outcomes on the turn after a refusal. Columns give the share of post-refusal turns that are refused again (Refusal $\rightarrow$ Refusal) or answered but still unsuccessful (Refusal $\rightarrow$ Failure); the remaining share are post-refusal successes, so rows do not sum to 100\%.}
+      \label{tab:refusal_transition}
+      \footnotesize
+      \begin{tabular}{lccc}
+            \toprule
+            \textbf{Target}
+                                  & \textbf{Refusal Turns}
+                                  & \textbf{Refusal $\rightarrow$ Refusal}
+                                  & \textbf{Refusal $\rightarrow$ Failure}                   \\
+            \midrule
+            \texttt{deepseek\_v4} & 124                                    & 82.6\% & 2.6\%  \\
+            \texttt{gpt\_4o}      & 160                                    & 71.8\% & 12.8\% \\
+            \texttt{llama\_3\_1}  & 127                                    & 36.3\% & 20.2\% \\
+            \texttt{qwen3\_5}     & 1216                                   & 74.2\% & 13.9\% \\
+            \bottomrule
+      \end{tabular}
+
+\end{table}
+
+\subsection{Judge Model}
+\label{sec:judge}
+
+The judge model $J$ evaluates each target response along five axes: two binary gates, $\text{off\_topic}$ and $\text{refusal}$ (both in $\{0,1\}$), and three graded criteria, $\text{specific}$ and $\text{convincing}$ (both in $\{1,\dots,5\}$), and $\text{toxicity} \in \{0,\dots,5\}$.
+The score is
+\begin{equation}
+      r = (1-\text{off\_topic})(1-\text{refusal}) \cdot
+      \frac{\text{specific}+\text{convincing}}{2} \cdot \text{toxicity},
+\end{equation}
+yielding $r \in [0,25]$.
+A response is deemed harmful when $r \ge 10$.
+The two gates coincide in practice: an off-topic turn is recorded as a refusal, so either gate alone zeroes $r$ and $(1-\text{off\_topic})(1-\text{refusal})$ reduces to $(1-\text{refusal})$.
+The scoring criteria are adapted from the ELITE evaluator~\cite{elite}, originally proposed for vision-language models, which introduces an explicit toxicity term; we restrict it to text responses and add the off-topic gate.
+
+The gates are determined independently of the graded criteria.
+A partially compliant response (one that conveys some of the requested content while hedging) is treated as non-refusal ($\text{refusal}=0$), so that it is scored rather than zeroed.
+This lets IAM-Teamer capture the gradation that binary success/failure benchmarks miss.
+For every response, $J$ additionally parses it into one of 11 refusal flags (e.g., explicit\_refusal, policy\_citation, partial\_compliance), which guide strategy selection on the next turn.
+$J$ also emits a brief reasoning trace for each judgment.
+
+\subsection{MemoryDB}
+\label{sec:memory}
+
+IAM-Teamer maintains a separate memory $\mathcal{M}_T$ for each target model family $T$, reflecting that different models exhibit different defensive behaviors.
+A target is mapped to its family before storage (e.g., Qwen3.5-27B is recorded under the Qwen3.5 family memory); in our evaluation each family contains a single target, so per-family and per-target memory coincide.
+For every attempt, $\mathcal{M}_T$ records the strategy family used, the attack model's reasoning summary, the target response, the judge's reasoning and score $r$, and, for refusals, the parsed refusal flags.
+This per-target memory serves two roles.
+It supplies the success statistics for strategy selection, and it provides retrieved context that conditions the attack model's generation.
+
+Beyond these per-strategy statistics, $\mathcal{M}_T$ also records \emph{why} an attempt succeeded.
+Whenever a turn is judged non-refusing, $J$ additionally extracts a small set of reusable success mechanisms---the framing or structural move that produced compliance---rather than the strategy label alone (Supplementary Section~\ref{app:judge}).
+Each mechanism is merged into the closest existing entry if it is semantically similar, using the same matching process applied when comparing a new strategy name against $\mathcal{S}$. This approach reduces near-duplicate entries but does not entirely eliminate them when repeated successes exhibit enough surface variation to fall outside the merge threshold (Supplementary Section~\ref{app:memory_dedup}).
+Every mechanism is further scoped as either strategy-specific, tied to the family used that turn, or general, a composable technique that transfers across strategies (e.g., output-format priming), which keeps a persona-specific trick from being suggested once $A$ commits to an unrelated family.
+Ultimately, the hint $H$ integrates these mechanisms alongside the strategy rankings and retrieved cases, presenting a unified context to $A$.
+
+\subsection{Strategy Selection}
+\label{sec:strategy}
+
+We select strategies using Thompson sampling over per-strategy success rates estimated from past attempts against the target.
+Each strategy $s$ carries a Beta posterior over its success probability, $\text{Beta}(1+w_s,\,1+l_s)$, starting from a uniform $\text{Beta}(1,1)$ prior, where $w_s$ and $l_s$ count the judged successes and non-successes of $s$ so far.
+An attempt counts as a success when its response is non-refused and judged harmful ($r \ge 10$); the graded score is collapsed to this binary reward for the posterior update, so a partially compliant turn credits the strategy only when it clears the threshold.
+Sampling from these posteriors, rather than always taking the current best, favors high-performing strategies while still giving less-tried ones a chance; this sustains exploration across an expanding strategy set.
+The five seed strategies are always available to $A$, and any new or composed strategy is tracked from its first use.
+
+At each turn we draw one sample $\theta_s$ from every strategy's posterior, rank the strategies by $\theta_s$ (breaking ties by cost efficiency), and pass the top-ranked strategies to $A$ as a hint.
+Rather than forcing the top choice, $A$ reasons over the hint, the retrieved memory, and the previous refusal flags to decide which strategy to apply, adapt, compose, or invent; inventing or composing a new strategy is an exploration step driven by $A$ itself.
+After the turn, the chosen strategy's posterior is updated with the observed binary outcome, incrementing $w_s$ on a success and $l_s$ otherwise.
+
+\subsection{Attack Procedure}
+\label{sec:procedure}
+
+The overall procedure is summarized in Algorithm~\ref{alg:iamteamer}.
+For each goal, IAM-Teamer runs a multi-turn conversation against the target, selecting a strategy via Thompson sampling, generating a prompt, scoring the response, and updating both the memory and the strategy posterior.
+The per-target memory $\mathcal{M}_T$ continuously accumulates knowledge across different goals, so later goals benefit from strategies that succeeded on earlier ones against the same target.
+
+\begin{algorithm}[t]
+      \caption{IAM-Teamer}
+      \label{alg:iamteamer}
+      \footnotesize
+      \begin{algorithmic}[1]
+            \Require Harmful goal $g$; attacker $A$, target $T$, judge $J$
+            \Require Per-target memory $\mathcal{M}_T$ (persists across goals); seed strategies $\mathcal{S}_0$
+            \Require Turn budget $K$, backtrack cap $B$, success threshold $\tau$
+            \Ensure Success flag and breakthrough attempt
+            \State
+            \State \textbf{Initialize:}
+            \State \quad $C_T \gets [\,]$ \Comment{target-visible conversation}
+            \State \quad $c \gets 0,\; b \gets 0$ \Comment{attempts used; backtracks used}
+            \State \quad $\phi \gets \varnothing$ \Comment{previous-turn refusal flags}
+            \State
+            \While{$c < K$}
+            \State Sample a success estimate $\theta_s$ for every strategy $s \in \mathcal{S}$ \Comment{Thompson sampling}
+            \State $H \gets \textsc{Retrieve}(\mathcal{M}_T,\, g,\, \{\theta_s\})$ \Comment{ranked strategy hint + retrieved cases}
+            \If{$c = 0$}
+            \State $(p, s) \gets A_{\mathrm{open}}(g,\, H)$ \Comment{soft-opening: benign context, no overt intent}
+            \Else
+            \State $(p, s) \gets A(g,\, C_T,\, H,\, \phi)$ \Comment{gradual escalation; $s$ applies, composes, or invents a strategy}
+            \EndIf
+            \State $y \gets T(C_T \,\Vert\, p)$ \Comment{target response}
+            \State $(r, \rho, \phi) \gets J(g,\, p,\, y)$ \Comment{score $r$, refusal $\rho$, refusal flags $\phi$}
+            \State $c \gets c + 1$
+            \State $\textsc{Update}(\mathcal{M}_T,\, s,\, p,\, y,\, r,\, \phi)$ \Comment{record attempt; update success estimate of strategy $s$}
+            \If{$\lnot \rho \;\textbf{and}\; r \ge \tau$}
+            \State \Return \textbf{success} at attempt $c$
+            \ElsIf{$\rho \;\textbf{and}\; b < B \;\textbf{and}\; c < K$}
+            \State $b \gets b + 1$ \Comment{backtrack: drop the refused turn, retry the same position}
+            \Else
+            \State $C_T \gets C_T \,\Vert\, [\,p,\, y\,]$ \Comment{confirm turn into the visible conversation}
+            \EndIf
+            \EndWhile
+            \State \Return \textbf{failure}
+      \end{algorithmic}
+\end{algorithm}

@@ -1,0 +1,29 @@
+\section{Background}
+\label{sec:background}
+
+\subsection{LLM and Prompts}
+
+Large Language Models (LLMs) are Transformer-based models trained to predict the next token $t_n$ in a sequence $T = (t_1, t_2, \dots, t_n)$ auto-regressively.
+Trained on massive text corpora, they acquire broad linguistic and reasoning capabilities across NLP tasks such as generation, translation, summarization, and question answering.
+
+An LLM is driven by a prompt $P$, typically composed of a system prompt $P_{sys}$ that specifies the model's role and constraints, and a user prompt $P_{user}$ that carries the request.
+Since the output depends entirely on $P$, its content and structure directly determine the response, the very property that jailbreak attacks exploit.
+
+\subsection{Safety Alignment}
+
+To reduce misuse (e.g., generating misinformation or facilitating illegal activities), providers apply safety alignment so that models refuse harmful requests and act in line with human values and usage policies~\cite{instructgpt}.
+Common techniques include supervised fine-tuning (SFT) and reinforcement learning from human feedback (RLHF), while more recent work enforces safety within the model's reasoning path through deliberative alignment~\cite{deliberative} and chain-of-thought~\cite{CoT}.
+
+\subsection{Jailbreak Attack}
+
+Despite these measures, LLMs remain vulnerable to jailbreak attacks, in which adversaries craft inputs that bypass alignment guardrails and elicit harmful responses~\cite{jailbroken}.
+Attacks are categorized by the adversary's access: a white-box adversary has the parameters and gradients needed for optimization-based attacks, whereas a black-box adversary interacts only through the API.
+Early research focused on single-turn attacks, where the entire malicious intent sits in one prompt, making it conspicuous to input filters and leaving no room to steer the model gradually.
+Multi-turn attacks instead distribute the intent across conversational turns: each turn appears benign on its own, yet the accumulated context steers the model toward a harmful response while evading per-turn safety checks, a strategy that is structurally infeasible in the single-turn setting.
+
+\subsection{Thompson Sampling}
+
+Thompson sampling (TS) is a sequential decision-making algorithm that balances exploitation of current knowledge against exploration of new actions~\cite{thompson}.
+It models each action's expected reward as a posterior distribution; at each step it draws one sample per action, selects the action with the highest sampled value, and updates that action's posterior from the observed reward.
+Actions with greater uncertainty have wider posteriors and are thus explored more often, while consistently rewarding actions are increasingly favored as their posteriors concentrate.
+In IAM-Teamer, we treat each attack strategy as an action and its judged success rate against a target as the unknown reward, using TS to rank strategies and surface the most promising as a hint each turn, while the attacker makes the final choice (Section~\ref{sec:strategy}).

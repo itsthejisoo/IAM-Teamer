@@ -1,0 +1,16 @@
+# Python 3.12 recommended.
+
+# Core
+pydantic>=2.0
+pyyaml>=6.0
+
+# Providers — every model routes through the OpenRouter gateway
+openai>=1.40
+
+# Token counting and strategy-dedup embeddings (optional; pipeline degrades
+# gracefully without them, but install for accurate counts and good dedup)
+tiktoken>=0.7
+sentence-transformers>=3.0
+
+# Tests
+pytest>=8.0

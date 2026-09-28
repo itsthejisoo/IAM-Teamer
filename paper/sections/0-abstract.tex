@@ -1,0 +1,12 @@
+\begin{abstract}
+      Despite advances in safety alignment, large language models (LLMs) remain vulnerable to multi-turn jailbreak attacks that gradually distribute malicious intent across a conversation.
+      Existing multi-turn attack agents rely on a single target-agnostic strategy pool and generate low-diversity prompts, limiting their ability to adapt to specific target defenses.
+      We present IAM-Teamer (Inference-Adaptive Memory for Autonomous Red Teamer), a black-box multi-turn jailbreak framework that adapts to each target by maintaining a separate memory, conditioning every prompt on what has previously worked against that model.
+      The attacker also uses Thompson sampling to rank and select from an expanding set of strategy families, favoring what works while still exploring.
+      Across six targets, IAM-Teamer matches or exceeds strong baselines (Crescendo and GOAT), achieving successful jailbreaks in substantially fewer turns on well-aligned models, with only a small early-turn cost on the least-aligned target.
+      Our code and data will be released publicly upon publication.
+
+      \smallskip
+      \noindent\textbf{Warning:} this paper contains potentially harmful content.
+
+\end{abstract}

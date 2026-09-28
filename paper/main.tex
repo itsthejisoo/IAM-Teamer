@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}          
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\definecolor{hot}{RGB}{33,102,172}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}    
+\usepackage{microtype}
+\usepackage{placeins}
+\usepackage{chngcntr}
+\usepackage{graphicx} 
+\setlength{\emergencystretch}{2em}  
+\usepackage[most]{tcolorbox}
+\newtcblisting{promptbox}[1]{%
+  listing only, breakable, enhanced,
+  colback=blue!3, colframe=hot, coltitle=white,
+  fonttitle=\bfseries\sffamily, title={#1},
+  boxrule=0.7pt, arc=1mm, left=2mm, right=2mm, top=1mm, bottom=1mm,
+  listing options={basicstyle=\ttfamily\footnotesize, breaklines=true,
+    breakatwhitespace=false, columns=fullflexible, keepspaces=true, upquote=true,
+    inputencoding=utf8, extendedchars=true,
+    literate={→}{{$\rightarrow$}}1 {—}{{---}}1 {–}{{--}}1
+      {①}{{(1)}}1 {②}{{(2)}}1 {③}{{(3)}}1 {④}{{(4)}}1
+      {“}{{``}}1 {”}{{''}}1 {‘}{{`}}1 {’}{{'}}1},
+}
+\graphicspath{{figures/}}
+
+\title{IAM-Teamer: Inference-Adaptive Memory for Autonomous Red Teamer}
+\author{
+  \large Jisoo Kim$^{a}$,
+  \large Haehyun Cho$^{a,}$
+  \thanks{Corresponding author. \\ \hspace*{1.8em}\textit{E-mail address:} jkims@soongsil.ac.kr (J.S. Kim), haehyun@ssu.ac.kr (H. Cho)} \\[4pt]
+  \small\itshape $^{a}$School of AI Software, Soongsil University \\[3pt]
+  \small\itshape Seoul 06978, Republic of Korea
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{sections/0-abstract}
+
+\smallskip
+\noindent\textbf{Keywords:} Large language model; Jailbreak attacks; Multi-turn adversarial prompting; Red teaming; Autonomous jailbreak AI agent; AI safety alignment
+
+\input{sections/1-introduction}
+\input{sections/2-background}
+\input{sections/3-related_work}
+\input{sections/4-method}
+\input{sections/5-experiment}
+\input{sections/6-limitations}
+\input{sections/7-conclusion}
+\input{sections/9-declarations}
+
+\input{sections/references}
+
+\appendix
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+\counterwithin{equation}{section}
+\section*{Appendix}
+\input{sections/8-appendix}
+
+\end{document}

@@ -1,0 +1,14 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this work, we addressed two limitations shared by existing multi-turn jailbreak agents.
+The prompts they generate lack diversity, and they apply a single, target-agnostic strategy pool that cannot adapt to a specific model's defenses.
+We introduced IAM-Teamer, a black-box multi-turn jailbreak framework that couples an attack model, a target model, and a judge model with a per-target memory.
+Every attempt---its prompt, the strategy used, and the judge's score---is recorded, and the attacker conditions each subsequent prompt on this accumulated, target-specific feedback.
+A Thompson-sampled ranking guides strategy choice over a growing set of strategy families that the attacker may apply, compose, or extend with newly invented strategies. This ranking balances exploiting strategies that have already worked against the target with exploring new ones.
+
+Across six open-weight and proprietary targets, IAM-Teamer matches or exceeds strong multi-turn baselines (Crescendo and GOAT) while reaching success in substantially fewer turns on the strongly aligned models, where fixed-strategy baselines stall; the same conservative opening costs a small turn overhead on the least-aligned target, where an overt first turn already succeeds quickly.
+These results show that adaptive, memory-guided strategy selection extracts substantially more from the same query budget on well-defended models. They also expose a concrete frontier for future safety work, exemplified by the safety gap that remains on the most resistant target.
+By documenting these vulnerabilities and the driving per-target behaviors, we aim to support the development of more robust safety alignment.
+Consistent with responsible disclosure, our method relies on no model internals and recombines techniques already reachable by existing black-box attacks; the adversarial trajectories it produces can directly inform defensive training.
+Ultimately, this adversarial testing fosters a more nuanced understanding of safety principles, bolstering model robustness without limiting helpfulness.
